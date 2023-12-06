@@ -1,7 +1,7 @@
 use robotics_lib::utils::{go_allowed, in_bounds, calculate_cost_go_with_environment};
 use robotics_lib::interface::{Direction, robot_map, look_at_sky};
 use robotics_lib::runner::Runnable;
-use robotics_lib::world::{World, tile::TileType, tile::Tile};
+use robotics_lib::world::{World, tile::TileType};
 
 fn get_coords_row_col(robot: &impl Runnable, direction: Direction) -> (usize, usize) {
     let row = robot.get_coordinate().get_row();
@@ -14,11 +14,12 @@ fn get_coords_row_col(robot: &impl Runnable, direction: Direction) -> (usize, us
     }
 }
 
-pub(crate) fn get_adjacent_tiles(robot: &impl Runnable, world: &World, size: usize, tile: (usize, usize)) -> Vec<(usize, usize)> {
+pub(crate) fn get_adjacent_tiles(robot: &impl Runnable, world: &World, tile: (usize, usize)) -> Vec<(usize, usize)> {
     let mut ret = Vec::new();
 
     if let Some(map) = robot_map(world) {
         let (row, col) = tile;
+        let size = map.len();
 
         if col + 1 < size && map[row][col + 1].is_some() {
             ret.push((row, col + 1));

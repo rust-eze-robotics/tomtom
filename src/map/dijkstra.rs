@@ -32,13 +32,14 @@ impl PartialEq for State {
     }
 }
 
-pub(crate) fn dijkstra(robot: &impl Runnable, world: &World, size: usize, source: (usize, usize), targets: Vec<(usize, usize)>) -> Result<Path, String> {
+pub(crate) fn dijkstra(robot: &impl Runnable, world: &World, source: (usize, usize), targets: Vec<(usize, usize)>) -> Result<Path, String> {
     match robot_map(world) {
         None => {
             Err(String::from("Map not visible!"))
         },
         Some(map) => {
             let (source_row, source_col) = (source.0, source.1);
+            let size = map.len();
 
             if source_row >= size || source_col >= size {
                 return Err(String::from("Source out of bounds!"));
