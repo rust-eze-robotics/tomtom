@@ -3,7 +3,8 @@ use std::cmp::Ordering;
 use robotics_lib::runner::Runnable;
 use robotics_lib::world::World;
 use robotics_lib::interface::{Direction, robot_map};
-use crate::map::path::Path;
+use robotics_lib::world::tile::TileType;
+use crate::map::path::{Path, Move};
 use crate::map::utils::{calculate_go_cost, calculate_teleport_cost};
 
 #[derive(Eq)]
@@ -37,29 +38,36 @@ pub(crate) fn dijkstra(robot: &impl Runnable, world: &World, size: usize, source
             Err(String::from("Map not visible!"))
         },
         Some(map) => {
-            let (row, col) = (source.0, source.1);
+            let (source_row, source_col) = (source.0, source.1);
 
-            if row >= size || col >= size {
+            if source_row >= size || source_col >= size {
                 return Err(String::from("Source out of bounds!"));
             }
 
             let mut paths = Vec::new();
-        
+            let mut teleports = Vec::new();
+
             for row in 0..size {
                 paths.push(Vec::new());
                 
                 for col in 0..size {
                     paths[row].push(Path::new(source, (row, col)));
+
+                    if let Some(tile) = map[row][col] {
+                        if tile.tile_type == TileType::Teleport(true) {
+                            teleports.push((row, col));
+                        }
+                    }
                 }
             }
 
-            paths[row][col].cost = 0;
+            paths[source_row][source_col].cost = 0;
 
             let mut heap = BinaryHeap::new();
             heap.push(State{node: source, distance: 0});
 
             while !heap.is_empty() {
-                let node = heap.peek().unwrap().node;
+                let (row, col) = heap.peek().unwrap().node;
                 let distance = heap.pop().unwrap().distance;
 
                 if col + 1 < size {
@@ -67,7 +75,7 @@ pub(crate) fn dijkstra(robot: &impl Runnable, world: &World, size: usize, source
                         if distance + cost < paths[row][col + 1].cost {
                             paths[row][col + 1].cost = distance + cost;
                             paths[row][col + 1].moves = paths[row][col].moves;
-                            paths[row][col + 1].moves.push(Direction::Right);
+                            paths[row][col + 1].moves.push(Move::Go(Direction::Right));
                             heap.push(State{node: (row, col + 1), distance: distance + cost});
                         }
                     }
@@ -78,7 +86,7 @@ pub(crate) fn dijkstra(robot: &impl Runnable, world: &World, size: usize, source
                         if distance + cost < paths[row + 1][col].cost {
                             paths[row + 1][col].cost = distance + cost;
                             paths[row + 1][col].moves = paths[row][col].moves;
-                            paths[row + 1][col].moves.push(Direction::Down);
+                            paths[row + 1][col].moves.push(Move::Go(Direction::Down));
                             heap.push(State{node: (row + 1, col), distance: distance + cost});
                         }
                     }
@@ -89,7 +97,7 @@ pub(crate) fn dijkstra(robot: &impl Runnable, world: &World, size: usize, source
                         if distance + cost < paths[row][col - 1].cost {
                             paths[row][col - 1].cost = distance + cost;
                             paths[row][col - 1].moves = paths[row][col].moves;
-                            paths[row][col - 1].moves.push(Direction::Left);
+                            paths[row][col - 1].moves.push(Move::Go(Direction::Left));
                             heap.push(State{node: (row, col + 1), distance: distance + cost});
                         }
                     }
@@ -97,11 +105,26 @@ pub(crate) fn dijkstra(robot: &impl Runnable, world: &World, size: usize, source
 
                 if row - 1 < size {
                     if let Ok(cost) = calculate_go_cost(robot, world, Direction::Up) {
-                        if distance + cost < paths[row + 1][col].cost {
+                        if distance + cost < paths[row - 1][col].cost {
                             paths[row - 1][col].cost = distance + cost;
                             paths[row - 1][col].moves = paths[row][col].moves;
-                            paths[row - 1][col].moves.push(Direction::Up);
+                            paths[row - 1][col].moves.push(Move::Go(Direction::Up));
                             heap.push(State{node: (row - 1, col), distance: distance + cost});
+                        }
+                    }
+                }
+
+                if let Some(tile) = map[row][col] {
+                    if tile.tile_type == TileType::Teleport(true) {
+                        for (teleport_row, teleport_col) in teleports {
+                            if let Ok(cost) = calculate_teleport_cost(robot, world, (teleport_row, teleport_col)) {
+                                if distance + cost < paths[teleport_row][teleport_col].cost {
+                                    paths[teleport_row][teleport_col].cost = distance + cost;
+                                    paths[teleport_row][teleport_col].moves = paths[row][col].moves;
+                                    paths[teleport_row][teleport_col].moves.push(Move::Teleport);
+                                    heap.push(State{node: (teleport_row, teleport_col), distance: distance + cost});
+                                }
+                            }
                         }
                     }
                 }

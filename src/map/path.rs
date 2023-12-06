@@ -1,11 +1,18 @@
 use robotics_lib::interface::Direction;
 
+#[derive(Clone)]
+pub enum Move
+{
+    Go(Direction),
+    Teleport
+}
+
 #[derive(Default, Clone)]
 pub struct Path
 {
     pub source: (usize, usize),
     pub destination: (usize, usize),
-    pub moves: Vec<Direction>,
+    pub moves: Vec<Move>,
     pub cost: usize
 }
 
