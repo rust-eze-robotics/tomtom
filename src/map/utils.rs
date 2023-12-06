@@ -1,7 +1,7 @@
 use robotics_lib::utils::{go_allowed, in_bounds, calculate_cost_go_with_environment};
 use robotics_lib::interface::{Direction, robot_map, look_at_sky};
 use robotics_lib::runner::Runnable;
-use robotics_lib::world::{World, tile::TileType};
+use robotics_lib::world::{World, tile::TileType, tile::Tile};
 
 fn get_coords_row_col(robot: &impl Runnable, direction: Direction) -> (usize, usize) {
     let row = robot.get_coordinate().get_row();
@@ -12,6 +12,32 @@ fn get_coords_row_col(robot: &impl Runnable, direction: Direction) -> (usize, us
         | Direction::Left => (row, col - 1),
         | Direction::Right => (row, col + 1),
     }
+}
+
+pub(crate) fn get_adjacent_tiles(robot: &impl Runnable, world: &World, size: usize, tile: (usize, usize)) -> Vec<(usize, usize)> {
+    let mut ret = Vec::new();
+
+    if let Some(map) = robot_map(world) {
+        let (row, col) = tile;
+
+        if col + 1 < size && map[row][col + 1].is_some() {
+            ret.push((row, col + 1));
+        }
+
+        if row + 1 < size && map[row + 1][col].is_some() {
+            ret.push((row + 1, col));
+        }
+
+        if col - 1 < size && map[row][col - 1].is_some() {
+            ret.push((row, col - 1));
+        }
+
+        if row - 1 < size && map[row - 1][col].is_some() {
+            ret.push((row - 1, col));
+        }
+    }
+
+    ret
 }
 
 pub(crate) fn calculate_go_cost(robot: &impl Runnable, world: &World, direction: Direction) -> Result<usize, String> {
