@@ -1,10 +1,9 @@
-use robotics_lib::utils::{go_allowed, calculate_cost_go_with_environment};
+use robotics_lib::utils::{go_allowed, in_bounds, calculate_cost_go_with_environment};
 use robotics_lib::interface::{Direction, robot_map, look_at_sky};
 use robotics_lib::runner::Runnable;
 use robotics_lib::world::{World, tile::TileType};
-use robotics_lib::utils::LibError;
 
-fn get_coords_row_col(robot: &impl Runnable, direction: &Direction) -> (usize, usize) {
+fn get_coords_row_col(robot: &impl Runnable, direction: Direction) -> (usize, usize) {
     let row = robot.get_coordinate().get_row();
     let col = robot.get_coordinate().get_col();
     match direction {
@@ -15,8 +14,8 @@ fn get_coords_row_col(robot: &impl Runnable, direction: &Direction) -> (usize, u
     }
 }
 
-pub(crate) fn calculate_go_cost(robot: &impl Runnable, world: &World, direction: &Direction) -> Result<usize, String> {
-    if go_allowed(robot, world, direction).is_err() {
+pub(crate) fn calculate_go_cost(robot: &impl Runnable, world: &World, direction: Direction) -> Result<usize, String> {
+    if go_allowed(robot, world, &direction).is_err() {
         return Err(String::from("Go not allowed!"));
     }
 

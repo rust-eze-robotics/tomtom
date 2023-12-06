@@ -6,6 +6,7 @@ use robotics_lib::world::tile::{Content, TileType};
 use crate::map::path::Path;
 
 mod path;
+mod dijkstra;
 mod utils;
 
 pub struct MapTool {}
