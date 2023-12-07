@@ -1,4 +1,4 @@
-# Rust-eze Robotics' Tools
+# Rust-eze Robotics' Tools: TomTom
 
 ![Tags](https://badgen.net/badge/icon/%23AdvancedProgramming%20%23Tools/14406F1?icon=https://icons.getbootstrap.com/assets/icons/bookmarks-fill.svg&label&labelColor=FFF)
 
@@ -10,7 +10,7 @@
 
 # Summary
 
-- [Rust-eze Robotics' Tools](#rusteze-robotics-tools)
+- [Rust-eze Robotics' Tools: TomTom](#rusteze-robotics-tools-tomtom)
 - [Summary](#summary)
     - [Description](#description)
     - [Requirements](#requirements)
