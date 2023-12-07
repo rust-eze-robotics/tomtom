@@ -66,7 +66,7 @@ pub(crate) fn calculate_go_cost(robot: &impl Runnable, world: &World, direction:
             let destination = map[destination_row][destination_col].unwrap();
 
             let mut base_cost = destination.tile_type.properties().cost();
-            let mut elevation_cost;
+            let mut elevation_cost = 0;
 
             base_cost = calculate_cost_go_with_environment(base_cost, look_at_sky(world), destination.tile_type);
 
