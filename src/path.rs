@@ -1,12 +1,12 @@
 use robotics_lib::interface::Direction;
 
-#[derive(Clone)]
+#[derive(Debug, Clone)]
 pub enum Action {
     Go(Direction),
     Teleport((usize, usize)),
 }
 
-#[derive(Default, Clone)]
+#[derive(Debug, Default, Clone)]
 pub struct Path {
     pub source: (usize, usize),
     pub destination: (usize, usize),
@@ -20,7 +20,7 @@ impl Path {
             source: source,
             destination: destination,
             actions: Vec::new(),
-            cost: cost
+            cost: cost,
         }
     }
 }

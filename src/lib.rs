@@ -11,6 +11,7 @@ mod dijkstra;
 mod path;
 mod utils;
 
+#[derive(Default)]
 pub struct TomTom {}
 
 impl Tools for TomTom {}
