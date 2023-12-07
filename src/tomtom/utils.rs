@@ -1,7 +1,7 @@
 use robotics_lib::utils::{go_allowed, in_bounds, calculate_cost_go_with_environment};
 use robotics_lib::interface::{Direction, robot_map, look_at_sky};
 use robotics_lib::runner::Runnable;
-use robotics_lib::world::{World, tile::TileType, tile::Tile};
+use robotics_lib::world::{World, tile::TileType, tile::Content};
 
 fn get_coords_row_col(robot: &impl Runnable, direction: Direction) -> (usize, usize) {
     let row = robot.get_coordinate().get_row();
@@ -35,6 +35,40 @@ pub(crate) fn get_adjacent_tiles(world: &World, tile: (usize, usize)) -> Vec<(us
 
         if row - 1 < size && map[row - 1][col].is_some() {
             ret.push((row - 1, col));
+        }
+    }
+
+    ret
+}
+
+pub(crate) fn get_specific_tiles(world: &World, tile_type: &Option<TileType>, content: &Option<Content>) -> Vec<(usize, usize)> {
+    let mut ret = Vec::new();
+
+    if let Some(map) = robot_map(world) {
+        let size = map.len();
+
+        for row in 0..size {
+            for col in 0..size {
+                if let Some(tile) = map[row][col].as_ref() {
+                    let mut control = true;
+
+                    if let Some(t) = tile_type.clone() {
+                        if t != tile.tile_type {
+                            control = false;
+                        }
+                    }
+
+                    if let Some(c) = content.clone() {
+                        if c != tile.content {
+                            control = false;
+                        }
+                    }
+
+                    if control {
+                        ret.push((row, col));
+                    }
+                }
+            }
         }
     }
 
