@@ -1,7 +1,9 @@
 # Rust-eze Robotics' Tools
 
 ![Tags](https://badgen.net/badge/icon/%23AdvancedProgramming%20%23Tools/14406F1?icon=https://icons.getbootstrap.com/assets/icons/bookmarks-fill.svg&label&labelColor=FFF)
+
 ![Language](https://img.shields.io/badge/Built_with-Rust-F86424?labelColor=000&logo=rust) ![Version](https://badgen.net/badge/Version/01.01/F08C2F?labelColor=000)
+
 ![GroupName](https://badgen.net/badge/Group%20Name/Rust-eze%20Robotics/A62424?labelColor=000) ![Authors](https://badgen.net/badge/Authors/Davide%20A.%20-%20Guglielmo%20B.%20-%20Aris%20T.%20-%20Chiara%20S./F23A29?labelColor=000)
 
 ---
@@ -12,7 +14,7 @@
 - [Summary](#summary)
     - [Description](#description)
     - [Requirements](#requirements)
-    - [Directories structure](#directories-structure)
+    - [Project Tree](#project-tree)
     - [Execution example](#execution-example)
     - [Development Process](#development-process)
         - [Research](#research)
@@ -33,7 +35,7 @@
 
 ---
 
-## Directories structure
+## Project Tree
 
 - Tools
     - src
@@ -41,9 +43,7 @@
         - lib.rs
     - docs
         - CHANGELOG.txt
-
-    - logs
-        - log.log
+        - LICENSE.txt
 
     - Cargo.toml
 
