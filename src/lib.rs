@@ -71,19 +71,19 @@ impl TomTom {
         world: &mut World,
         adjacent: bool,
         destination: (usize, usize),
-    ) -> Result<(), String> {
+    ) -> Result<Path, String> {
         match self.get_path_to_coordinate(robot, world, adjacent, destination) {
             Err(e) => Err(e),
             Ok(path) => {
-                for action in path.actions {
+                for action in path.actions.iter() {
                     match action {
                         Action::Go(d) => {
-                            if let Err(_) = go(robot, world, d) {
+                            if let Err(_) = go(robot, world, d.clone()) {
                                 return Err(String::from("Error while calling go interface!"));
                             }
                         }
                         Action::Teleport((row, col)) => {
-                            if let Err(_) = teleport(robot, world, (row, col)) {
+                            if let Err(_) = teleport(robot, world, (*row, *col)) {
                                 return Err(String::from(
                                     "Error while calling teleport interface!",
                                 ));
@@ -92,7 +92,7 @@ impl TomTom {
                     }
                 }
 
-                Ok(())
+                Ok(path)
             }
         }
     }
@@ -104,19 +104,19 @@ impl TomTom {
         adjacent: bool,
         tile_type: Option<TileType>,
         content: Option<Content>,
-    ) -> Result<(), String> {
+    ) -> Result<Path, String> {
         match self.get_path_to_tile(robot, world, adjacent, tile_type, content) {
             Err(e) => Err(e),
             Ok(path) => {
-                for action in path.actions {
+                for action in path.actions.iter() {
                     match action {
                         Action::Go(d) => {
-                            if let Err(_) = go(robot, world, d) {
+                            if let Err(_) = go(robot, world, d.clone()) {
                                 return Err(String::from("Error while calling go interface!"));
                             }
                         }
                         Action::Teleport((row, col)) => {
-                            if let Err(_) = teleport(robot, world, (row, col)) {
+                            if let Err(_) = teleport(robot, world, (*row, *col)) {
                                 return Err(String::from(
                                     "Error while calling teleport interface!",
                                 ));
@@ -125,7 +125,7 @@ impl TomTom {
                     }
                 }
 
-                Ok(())
+                Ok(path)
             }
         }
     }
