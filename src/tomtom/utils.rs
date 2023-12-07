@@ -1,7 +1,7 @@
 use robotics_lib::utils::{go_allowed, in_bounds, calculate_cost_go_with_environment};
 use robotics_lib::interface::{Direction, robot_map, look_at_sky};
 use robotics_lib::runner::Runnable;
-use robotics_lib::world::{World, tile::TileType};
+use robotics_lib::world::{World, tile::TileType, tile::Tile};
 
 fn get_coords_row_col(robot: &impl Runnable, direction: Direction) -> (usize, usize) {
     let row = robot.get_coordinate().get_row();
@@ -14,7 +14,7 @@ fn get_coords_row_col(robot: &impl Runnable, direction: Direction) -> (usize, us
     }
 }
 
-pub(crate) fn get_adjacent_tiles(robot: &impl Runnable, world: &World, tile: (usize, usize)) -> Vec<(usize, usize)> {
+pub(crate) fn get_adjacent_tiles(world: &World, tile: (usize, usize)) -> Vec<(usize, usize)> {
     let mut ret = Vec::new();
 
     if let Some(map) = robot_map(world) {
@@ -62,8 +62,8 @@ pub(crate) fn calculate_go_cost(robot: &impl Runnable, world: &World, direction:
                 return Err(String::from("Destination is None!"));
             }
 
-            let source = map[source_row][source_col].unwrap();
-            let destination = map[destination_row][destination_col].unwrap();
+            let source = map[source_row][source_col].clone().unwrap();
+            let destination = map[destination_row][destination_col].clone().unwrap();
 
             let mut base_cost = destination.tile_type.properties().cost();
             let mut elevation_cost = 0;
@@ -96,20 +96,26 @@ pub(crate) fn calculate_teleport_cost(robot: &impl Runnable, world: &World, dest
                 return Err(String::from("Destination out of bounds!"));
             }
 
-            if map[source_row][source_col].is_none() {
-                return Err(String::from("Source is None!"));
+            match &map[source_row][source_col] {
+                None => {
+                    return Err(String::from("Source is None!"));
+                }
+                Some(tile) => {
+                    if tile.tile_type != TileType::Teleport(true) {
+                        return Err(String::from("Source is not a teleport!"));
+                    }
+                }
             }
 
-            if map[destination_row][destination_col].is_none() {
-                return Err(String::from("Destination is None!"));
-            }
-
-            if map[source_row][source_col].unwrap().tile_type != TileType::Teleport(true) {
-                return Err(String::from("Source is not a teleport!"));
-            }
-
-            if map[destination_row][destination_col].unwrap().tile_type != TileType::Teleport(true) {
-                return Err(String::from("Destination is not a teleport!"));
+            match &map[destination_row][destination_col] {
+                None => {
+                    return Err(String::from("Destination is None!"));
+                }
+                Some(tile) => {
+                    if tile.tile_type != TileType::Teleport(true) {
+                        return Err(String::from("Destination is not a teleport!"));
+                    }
+                }
             }
 
             Ok(30)

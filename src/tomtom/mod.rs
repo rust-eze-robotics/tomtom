@@ -22,7 +22,7 @@ impl TomTom
         let mut targets = Vec::new();
         
         if adjacent {
-            targets = get_adjacent_tiles(robot, world, destination);
+            targets = get_adjacent_tiles(world, destination);
         } else {
             targets.push(destination);
         }
@@ -30,15 +30,15 @@ impl TomTom
         dijkstra(robot, world, source, targets)
     }
 
-    pub fn get_path_to_tile(&self, robot: &impl Runnable, world: &World, adjacent: bool, tile_type: Option<TileType>, content: Option<Content>) -> Result<Path, String> {
+    // pub fn get_path_to_tile(&self, robot: &impl Runnable, world: &World, adjacent: bool, tile_type: Option<TileType>, content: Option<Content>) -> Result<Path, String> {
 
-    }
+    // }
 
-    pub fn go_to_coordinate(&self, robot: &impl Runnable, world: &World, adjacent: bool, destination: (usize, usize)) -> Result<(), String> {
+    // pub fn go_to_coordinate(&self, robot: &impl Runnable, world: &World, adjacent: bool, destination: (usize, usize)) -> Result<(), String> {
 
-    }
+    // }
 
-    pub fn go_to_tile(&self, robot: &impl Runnable, world: &World, adjacent: bool, tile_type: Option<TileType>, content: Option<Content>) Result<(), String> {
+    // pub fn go_to_tile(&self, robot: &impl Runnable, world: &World, adjacent: bool, tile_type: Option<TileType>, content: Option<Content>) Result<(), String> {
 
-    }
+    // }
 }   
