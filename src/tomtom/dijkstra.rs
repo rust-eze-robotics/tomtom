@@ -4,7 +4,7 @@ use robotics_lib::runner::Runnable;
 use robotics_lib::world::World;
 use robotics_lib::interface::{Direction, robot_map};
 use robotics_lib::world::tile::TileType;
-use crate::tomtom::path::{Path, Move};
+use crate::tomtom::path::{Path, Action};
 use crate::tomtom::utils::{calculate_go_cost, calculate_teleport_cost};
 
 #[derive(Eq)]
@@ -75,8 +75,8 @@ pub(crate) fn dijkstra(robot: &impl Runnable, world: &World, source: (usize, usi
                     if let Ok(cost) = calculate_go_cost(robot, world, Direction::Right) {
                         if distance + cost < paths[row][col + 1].cost {
                             paths[row][col + 1].cost = distance + cost;
-                            paths[row][col + 1].moves = paths[row][col].moves.clone();
-                            paths[row][col + 1].moves.push(Move::Go(Direction::Right));
+                            paths[row][col + 1].actions = paths[row][col].actions.clone();
+                            paths[row][col + 1].actions.push(Action::Go(Direction::Right));
                             heap.push(State{node: (row, col + 1), distance: distance + cost});
                         }
                     }
@@ -86,8 +86,8 @@ pub(crate) fn dijkstra(robot: &impl Runnable, world: &World, source: (usize, usi
                     if let Ok(cost) = calculate_go_cost(robot, world, Direction::Down) {
                         if distance + cost < paths[row + 1][col].cost {
                             paths[row + 1][col].cost = distance + cost;
-                            paths[row + 1][col].moves = paths[row][col].moves.clone();
-                            paths[row + 1][col].moves.push(Move::Go(Direction::Down));
+                            paths[row + 1][col].actions = paths[row][col].actions.clone();
+                            paths[row + 1][col].actions.push(Action::Go(Direction::Down));
                             heap.push(State{node: (row + 1, col), distance: distance + cost});
                         }
                     }
@@ -97,8 +97,8 @@ pub(crate) fn dijkstra(robot: &impl Runnable, world: &World, source: (usize, usi
                     if let Ok(cost) = calculate_go_cost(robot, world, Direction::Left) {
                         if distance + cost < paths[row][col - 1].cost {
                             paths[row][col - 1].cost = distance + cost;
-                            paths[row][col - 1].moves = paths[row][col].moves.clone();
-                            paths[row][col - 1].moves.push(Move::Go(Direction::Left));
+                            paths[row][col - 1].actions = paths[row][col].actions.clone();
+                            paths[row][col - 1].actions.push(Action::Go(Direction::Left));
                             heap.push(State{node: (row, col + 1), distance: distance + cost});
                         }
                     }
@@ -108,8 +108,8 @@ pub(crate) fn dijkstra(robot: &impl Runnable, world: &World, source: (usize, usi
                     if let Ok(cost) = calculate_go_cost(robot, world, Direction::Up) {
                         if distance + cost < paths[row - 1][col].cost {
                             paths[row - 1][col].cost = distance + cost;
-                            paths[row - 1][col].moves = paths[row][col].moves.clone();
-                            paths[row - 1][col].moves.push(Move::Go(Direction::Up));
+                            paths[row - 1][col].actions = paths[row][col].actions.clone();
+                            paths[row - 1][col].actions.push(Action::Go(Direction::Up));
                             heap.push(State{node: (row - 1, col), distance: distance + cost});
                         }
                     }
@@ -121,8 +121,8 @@ pub(crate) fn dijkstra(robot: &impl Runnable, world: &World, source: (usize, usi
                             if let Ok(cost) = calculate_teleport_cost(robot, world, (teleport_row, teleport_col)) {
                                 if distance + cost < paths[teleport_row][teleport_col].cost {
                                     paths[teleport_row][teleport_col].cost = distance + cost;
-                                    paths[teleport_row][teleport_col].moves = paths[row][col].moves.clone();
-                                    paths[teleport_row][teleport_col].moves.push(Move::Teleport);
+                                    paths[teleport_row][teleport_col].actions = paths[row][col].actions.clone();
+                                    paths[teleport_row][teleport_col].actions.push(Action::Teleport((teleport_row, teleport_col)));
                                     heap.push(State{node: (teleport_row, teleport_col), distance: distance + cost});
                                 }
                             }
