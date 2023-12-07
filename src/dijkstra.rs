@@ -54,7 +54,7 @@ pub(crate) fn dijkstra(
                 paths.push(Vec::new());
 
                 for col in 0..size {
-                    paths[row].push(Path::new(source, (row, col)));
+                    paths[row].push(Path::new(source, (row, col), usize::MAX));
 
                     if let Some(tile) = map[row][col].as_ref() {
                         if tile.tile_type == TileType::Teleport(true) {

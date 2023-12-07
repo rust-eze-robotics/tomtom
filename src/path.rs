@@ -15,12 +15,12 @@ pub struct Path {
 }
 
 impl Path {
-    pub(crate) fn new(source: (usize, usize), destination: (usize, usize)) -> Path {
+    pub(crate) fn new(source: (usize, usize), destination: (usize, usize), cost: usize) -> Path {
         Path {
             source: source,
             destination: destination,
             actions: Vec::new(),
-            cost: usize::MAX,
+            cost: cost
         }
     }
 }
