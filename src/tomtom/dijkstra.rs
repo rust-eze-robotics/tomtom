@@ -4,8 +4,8 @@ use robotics_lib::runner::Runnable;
 use robotics_lib::world::World;
 use robotics_lib::interface::{Direction, robot_map};
 use robotics_lib::world::tile::TileType;
-use crate::map::path::{Path, Move};
-use crate::map::utils::{calculate_go_cost, calculate_teleport_cost};
+use crate::tomtom::path::{Path, Move};
+use crate::tomtom::utils::{calculate_go_cost, calculate_teleport_cost};
 
 #[derive(Eq)]
 struct State
