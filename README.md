@@ -37,7 +37,7 @@
 
 - Tools
     - src
-        - map
+        - tomtom
         - lib.rs
     - docs
         - CHANGELOG.txt
