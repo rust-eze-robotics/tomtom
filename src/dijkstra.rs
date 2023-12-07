@@ -1,5 +1,5 @@
-use crate::tomtom::path::{Action, Path};
-use crate::tomtom::utils::{calculate_go_cost, calculate_teleport_cost};
+use crate::path::{Action, Path};
+use crate::utils::{calculate_go_cost, calculate_teleport_cost};
 use robotics_lib::interface::{robot_map, Direction};
 use robotics_lib::runner::Runnable;
 use robotics_lib::world::tile::TileType;
