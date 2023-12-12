@@ -17,10 +17,10 @@ pub struct Path {
 impl Path {
     pub(crate) fn new(source: (usize, usize), destination: (usize, usize), cost: usize) -> Path {
         Path {
-            source: source,
-            destination: destination,
+            source,
+            destination,
             actions: Vec::new(),
-            cost: cost,
+            cost,
         }
     }
 }

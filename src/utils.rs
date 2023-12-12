@@ -6,6 +6,7 @@ use robotics_lib::world::{tile::Content, tile::TileType, World};
 fn get_coords_row_col(robot: &impl Runnable, direction: Direction) -> (usize, usize) {
     let row = robot.get_coordinate().get_row();
     let col = robot.get_coordinate().get_col();
+
     match direction {
         Direction::Up => (row - 1, col),
         Direction::Down => (row + 1, col),
@@ -90,7 +91,7 @@ pub(crate) fn calculate_go_cost(
 
     match robot_map(world) {
         None => {
-            return Err(String::from("Map not visible!"));
+            Err(String::from("Map not visible!"))
         }
         Some(map) => {
             let (source_row, source_col) = (
@@ -135,7 +136,7 @@ pub(crate) fn calculate_teleport_cost(
 ) -> Result<usize, String> {
     match robot_map(world) {
         None => {
-            return Err(String::from("Map not visible!"));
+            Err(String::from("Map not visible!"))
         }
         Some(map) => {
             let (source_row, source_col) = (

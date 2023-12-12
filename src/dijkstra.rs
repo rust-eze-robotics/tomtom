@@ -38,7 +38,9 @@ pub(crate) fn dijkstra(
     targets: Vec<(usize, usize)>,
 ) -> Result<Path, String> {
     match robot_map(world) {
-        None => Err(String::from("Map not visible!")),
+        None => {
+            Err(String::from("Map not visible!"))
+        },
         Some(map) => {
             let (source_row, source_col) = (source.0, source.1);
             let size = map.len();
