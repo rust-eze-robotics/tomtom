@@ -14,7 +14,7 @@ pub fn get_path_to_coordinates(
 #### Arguments
 - robot: &impl Runnable
 - world: &World
-- adjacent: bool => if true the function will target the adjacent tiles to destination; if false it will target destination itself.
+- adjacent: bool => if true the function will target the adjacent tiles to destination, if false it will target destination itself.
 - destination: (usize, usize) => destination tile of coordinates (row, col).
 #### Return
 - Result<Path, String> => Ok(path) returns the path, Err(e) represents a possible error described by String e.
@@ -52,7 +52,7 @@ pub fn go_to_coordinates(
 #### Arguments
 - robot: &impl Runnable
 - world: &World
-- adjacent: bool => if true the function will target the adjacent tiles to destination; if false it will target destination itself.
+- adjacent: bool => if true the function will target the adjacent tiles to destination, if false it will target destination itself.
 - destination: (usize, usize) => destination tile of coordinates (row, col).
 #### Return
 - Result<Path, String> => Ok(path) returns the path, Err(e) represents a possible error described by String e.

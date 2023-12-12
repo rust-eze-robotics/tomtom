@@ -22,7 +22,7 @@ impl TomTom {
     /// # Arguments
     /// - robot: &impl Runnable
     /// - world: &World
-    /// - adjacent: bool => if true the function will target the adjacent tiles to destination; if false it will target destination itself.
+    /// - adjacent: bool => if true the function will target the adjacent tiles to destination, if false it will target destination itself.
     /// - destination: (usize, usize) => destination tile of coordinates (row, col).
     ///
     /// # Return
@@ -96,7 +96,7 @@ impl TomTom {
     /// # Arguments
     /// - robot: &impl Runnable
     /// - world: &World
-    /// - adjacent: bool => if true the function will target the adjacent tiles to destination; if false it will target destination itself.
+    /// - adjacent: bool => if true the function will target the adjacent tiles to destination, if false it will target destination itself.
     /// - destination: (usize, usize) => destination tile of coordinates (row, col).
     ///
     /// # Return
