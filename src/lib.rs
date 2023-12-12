@@ -1,14 +1,13 @@
+use crate::dijkstra::dijkstra;
+use crate::path::{Action, Path};
+use crate::utils::{get_adjacent_tiles, get_specific_tiles};
 use robotics_lib::interface::{go, teleport, Tools};
 use robotics_lib::runner::Runnable;
 use robotics_lib::world::tile::{Content, TileType};
 use robotics_lib::world::World;
 
-use self::dijkstra::dijkstra;
-use self::path::{Action, Path};
-use self::utils::{get_adjacent_tiles, get_specific_tiles};
-
+pub mod path;
 mod dijkstra;
-mod path;
 mod utils;
 
 #[derive(Default)]
@@ -17,7 +16,18 @@ pub struct TomTom {}
 impl Tools for TomTom {}
 
 impl TomTom {
-    pub fn get_path_to_coordinate(
+    /// get_path_to_coordinates returns the path having the smallest energy cost to reach the destination tile at the given coordinates
+    /// (or the 'nearest' adjacent tile), considering: go interface costs, tiles' walkability and elevation, environmental conditions and teleports.
+    ///
+    /// # Arguments
+    /// - robot: &impl Runnable
+    /// - world: &World
+    /// - adjacent: bool => if true the function will target the adjacent tiles to destination; if false it will target destination itself.
+    /// - destination: (usize, usize) => destination tile of coordinates (row, col).
+    ///
+    /// # Return
+    /// - Result<Path, String>   
+    pub fn get_path_to_coordinates(
         &self,
         robot: &impl Runnable,
         world: &World,
@@ -40,6 +50,19 @@ impl TomTom {
         dijkstra(robot, world, source, targets)
     }
 
+    /// get_path_to_tile returns the path having the smallest energy cost to reach the 'nearest' matched tile (or one of its adjacent tiles),
+    /// considering: go interface costs, tiles' walkability and elevation, environmental conditions and teleports.
+    /// Matched tiles are the tiles, discovered by the robot, that match the optional tile type and content.
+    ///
+    /// # Arguments
+    /// - robot: &impl Runnable
+    /// - world: &World
+    /// - adjacent: bool => if true the function will target the adjacent tiles to the matched tiles, if false it will target the matched tiles themselves.
+    /// - tile_type: Option<TileType> => optional tile type to be matched.
+    /// - content: Option<Content> => optional content to be matched.  
+    ///
+    /// # Return
+    /// - Result<Path, String>
     pub fn get_path_to_tile(
         &self,
         robot: &impl Runnable,
@@ -54,7 +77,6 @@ impl TomTom {
         );
 
         let destinations = get_specific_tiles(world, &tile_type, &content);
-
         let mut targets = Vec::new();
 
         for destination in destinations {
@@ -68,14 +90,25 @@ impl TomTom {
         dijkstra(robot, world, source, targets)
     }
 
-    pub fn go_to_coordinate(
+    /// go_to_coordinates calls get_path_to_coordinates: if the result is Ok(path) and the robot has enough energy to complete the path, it moves
+    /// the robot to the path's destination tile.
+    ///
+    /// # Arguments
+    /// - robot: &impl Runnable
+    /// - world: &World
+    /// - adjacent: bool => if true the function will target the adjacent tiles to destination; if false it will target destination itself.
+    /// - destination: (usize, usize) => destination tile of coordinates (row, col).
+    ///
+    /// # Return
+    /// - Result<Path, String>
+    pub fn go_to_coordinates(
         &self,
         robot: &mut impl Runnable,
         world: &mut World,
         adjacent: bool,
         destination: (usize, usize),
     ) -> Result<Path, String> {
-        match self.get_path_to_coordinate(robot, world, adjacent, destination) {
+        match self.get_path_to_coordinates(robot, world, adjacent, destination) {
             Err(e) => Err(e),
             Ok(path) => {
                 if !robot.get_energy().has_enough_energy(path.cost) {
@@ -104,6 +137,18 @@ impl TomTom {
         }
     }
 
+    /// Calls get_path_to_tile: if the result is Ok(path) and the robot has enough energy to complete the path, it moves
+    /// the robot to the path's destination tile.
+    ///
+    /// # Arguments
+    /// - robot: &impl Runnable
+    /// - world: &World
+    /// - adjacent: bool => if true the function will target the adjacent tiles to the matched tiles, if false it will target the matched tiles themselves.
+    /// - tile_type: Option<TileType> => optional tile type to be matched.
+    /// - content: Option<Content> => optional content to be matched.  
+    ///
+    /// # Return
+    /// - Result<Path, String>
     pub fn go_to_tile(
         &self,
         robot: &mut impl Runnable,
