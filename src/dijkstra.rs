@@ -37,10 +37,12 @@ pub(crate) fn dijkstra(
     source: (usize, usize),
     targets: Vec<(usize, usize)>,
 ) -> Result<Path, String> {
+    if targets.is_empty() {
+        return Err(String::from("Path not found!"));
+    }
+
     match robot_map(world) {
-        None => {
-            Err(String::from("Map not visible!"))
-        },
+        None => Err(String::from("Map not visible!")),
         Some(map) => {
             let (source_row, source_col) = (source.0, source.1);
             let size = map.len();

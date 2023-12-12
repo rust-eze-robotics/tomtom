@@ -76,10 +76,12 @@ impl TomTom {
         destination: (usize, usize),
     ) -> Result<Path, String> {
         match self.get_path_to_coordinate(robot, world, adjacent, destination) {
-            Err(e) => {
-                Err(e)
-            },
+            Err(e) => Err(e),
             Ok(path) => {
+                if !robot.get_energy().has_enough_energy(path.cost) {
+                    return Err(String::from("Not enough energy!"));
+                }
+
                 for action in path.actions.iter() {
                     match action {
                         Action::Go(d) => {
@@ -111,10 +113,12 @@ impl TomTom {
         content: Option<Content>,
     ) -> Result<Path, String> {
         match self.get_path_to_tile(robot, world, adjacent, tile_type, content) {
-            Err(e) => {
-                Err(e)
-            },
+            Err(e) => Err(e),
             Ok(path) => {
+                if !robot.get_energy().has_enough_energy(path.cost) {
+                    return Err(String::from("Not enough energy!"));
+                }
+
                 for action in path.actions.iter() {
                     match action {
                         Action::Go(d) => {

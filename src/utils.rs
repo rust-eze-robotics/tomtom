@@ -90,14 +90,13 @@ pub(crate) fn calculate_go_cost(
     }
 
     match robot_map(world) {
-        None => {
-            Err(String::from("Map not visible!"))
-        }
+        None => Err(String::from("Map not visible!")),
         Some(map) => {
             let (source_row, source_col) = (
                 robot.get_coordinate().get_row(),
                 robot.get_coordinate().get_col(),
             );
+
             let (destination_row, destination_col) = get_coords_row_col(robot, direction);
 
             if map[source_row][source_col].is_none() {
@@ -135,14 +134,13 @@ pub(crate) fn calculate_teleport_cost(
     destination: (usize, usize),
 ) -> Result<usize, String> {
     match robot_map(world) {
-        None => {
-            Err(String::from("Map not visible!"))
-        }
+        None => Err(String::from("Map not visible!")),
         Some(map) => {
             let (source_row, source_col) = (
                 robot.get_coordinate().get_row(),
                 robot.get_coordinate().get_col(),
             );
+
             let (destination_row, destination_col) = (destination.0, destination.1);
 
             if source_row >= map.len() || source_col >= map[0].len() {
