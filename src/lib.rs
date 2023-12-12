@@ -26,7 +26,7 @@ impl TomTom {
     /// - destination: (usize, usize) => destination tile of coordinates (row, col).
     ///
     /// # Return
-    /// - Result<Path, String>   
+    /// - Result<Path, String> => Ok(path) returns the path, Err(e) represents a possible error described by String e.
     pub fn get_path_to_coordinates(
         &self,
         robot: &impl Runnable,
@@ -50,7 +50,7 @@ impl TomTom {
         dijkstra(robot, world, source, targets)
     }
 
-    /// get_path_to_tile returns the path having the smallest energy cost to reach the 'nearest' matched tile (or one of its adjacent tiles),
+    /// get_path_to_tile returns the path having the smallest energy cost to reach the 'nearest' matched tile (or the 'nearest' adjacent tile),
     /// considering: go interface costs, tiles' walkability and elevation, environmental conditions and teleports.
     /// Matched tiles are the tiles, discovered by the robot, that match the optional tile type and content.
     ///
@@ -62,7 +62,7 @@ impl TomTom {
     /// - content: Option<Content> => optional content to be matched.  
     ///
     /// # Return
-    /// - Result<Path, String>
+    /// - Result<Path, String> => Ok(path) returns the path, Err(e) represents a possible error described by String e.
     pub fn get_path_to_tile(
         &self,
         robot: &impl Runnable,
@@ -100,7 +100,7 @@ impl TomTom {
     /// - destination: (usize, usize) => destination tile of coordinates (row, col).
     ///
     /// # Return
-    /// - Result<Path, String>
+    /// - Result<Path, String> => Ok(path) returns the path, Err(e) represents a possible error described by String e.
     pub fn go_to_coordinates(
         &self,
         robot: &mut impl Runnable,
@@ -137,7 +137,7 @@ impl TomTom {
         }
     }
 
-    /// Calls get_path_to_tile: if the result is Ok(path) and the robot has enough energy to complete the path, it moves
+    /// go_to_tile calls get_path_to_tile: if the result is Ok(path) and the robot has enough energy to complete the path, it moves
     /// the robot to the path's destination tile.
     ///
     /// # Arguments
@@ -148,7 +148,7 @@ impl TomTom {
     /// - content: Option<Content> => optional content to be matched.  
     ///
     /// # Return
-    /// - Result<Path, String>
+    /// - Result<Path, String> => Ok(path) returns the path, Err(e) represents a possible error described by String e.
     pub fn go_to_tile(
         &self,
         robot: &mut impl Runnable,

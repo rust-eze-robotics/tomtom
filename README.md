@@ -1,83 +1,78 @@
-# Rust-eze Robotics' Tools: TomTom
+# Rust-eze tomtom
+### Finds the path with the smallest energy cost to the tile at the specified coordinates or to the _nearest_ tile that matches the specified optional tile type and content, considering every world variable, teleports included.
 
-![Tags](https://badgen.net/badge/icon/%23AdvancedProgramming%20%23Tools/14406F1?icon=https://icons.getbootstrap.com/assets/icons/bookmarks-fill.svg&label&labelColor=FFF)
-
-![Language](https://img.shields.io/badge/Built_with-Rust-F86424?labelColor=000&logo=rust) ![Version](https://badgen.net/badge/Version/01.01/F08C2F?labelColor=000)
-
-![GroupName](https://badgen.net/badge/Group%20Name/Rust-eze%20Robotics/A62424?labelColor=000) ![Authors](https://badgen.net/badge/Authors/Davide%20A.%20-%20Guglielmo%20B.%20-%20Aris%20T.%20-%20Chiara%20S./F23A29?labelColor=000)
-
----
-
-# Summary
-
-- [Rust-eze Robotics' Tools: TomTom](#rusteze-robotics-tools-tomtom)
-- [Summary](#summary)
-    - [Description](#description)
-    - [Requirements](#requirements)
-    - [Project Tree](#project-tree)
-    - [Execution example](#execution-example)
-    - [Development Process](#development-process)
-        - [Research](#research)
-        - [Software Development](#software-development)
-    - [Useful Links](#useful-links)
-
----
-
-## Description
-
-<description>
-
----
-
-## Requirements
-
-- ![Rust](https://img.shields.io/badge/Rust-F86424?labelColor=000&logo=rust) <sup>([Install](https://www.rust-lang.org/tools/install))
-
----
-
-## Project Tree
-
-- Tools
-    - src
-        - tomtom
-        - lib.rs
-    - docs
-        - CHANGELOG.txt
-        - LICENSE.txt
-
-    - Cargo.toml
-
-    - .gitignore
-
-    - README.md
-
----
-
-## Execution example
-
-#### ![Provider](https://badgen.net/badge/icon/CLI/9121AF?labelColor=000&icon=terminal&label)
-
-```bash
-> cargo run
+### *get_path_to_coordinates* returns the path having the smallest energy cost to reach the destination tile at the given coordinates (or the 'nearest' adjacent tile), considering: go interface costs, tiles' walkability and elevation, environmental conditions and teleports.
+```rust
+pub fn get_path_to_coordinates(
+    &self,
+    robot: &impl Runnable,
+    world: &World,
+    adjacent: bool,
+    destination: (usize, usize),
+) -> Result<Path, String>
 ```
+#### Arguments
+- robot: &impl Runnable
+- world: &World
+- adjacent: bool => if true the function will target the adjacent tiles to destination; if false it will target destination itself.
+- destination: (usize, usize) => destination tile of coordinates (row, col).
+#### Return
+- Result<Path, String> => Ok(path) returns the path, Err(e) represents a possible error described by String e.
 
----
+### *get_path_to_tile* returns the path having the smallest energy cost to reach the 'nearest' matched tile (or the 'nearest' adjacent tile), considering: go interface costs, tiles' walkability and elevation, environmental conditions and teleports. Matched tiles are the tiles, discovered by the robot, that match the optional tile type and content.
+```rust
+pub fn get_path_to_tile(
+    &self,
+    robot: &impl Runnable,
+    world: &World,
+    adjacent: bool,
+    tile_type: Option<TileType>,
+    content: Option<Content>,
+) -> Result<Path, String>
+```
+#### Arguments
+- robot: &impl Runnable
+- world: &World
+- adjacent: bool => if true the function will target the adjacent tiles to the matched tiles, if false it will target the matched tiles themselves.
+- tile_type: Option<TileType> => optional tile type to be matched.
+- content: Option<Content> => optional content to be matched.  
+#### Return
+- Result<Path, String> => Ok(path) returns the path, Err(e) represents a possible error described by String e.
 
-### Development Process
+### *go_to_coordinates* calls *get_path_to_coordinates*: if the result is Ok(path) and the robot has enough energy to complete the path, it moves the robot to the path's destination tile.
+```rust
+pub fn go_to_coordinates(
+    &self,
+    robot: &mut impl Runnable,
+    world: &mut World,
+    adjacent: bool,
+    destination: (usize, usize),
+) -> Result<Path, String> 
+```
+#### Arguments
+- robot: &impl Runnable
+- world: &World
+- adjacent: bool => if true the function will target the adjacent tiles to destination; if false it will target destination itself.
+- destination: (usize, usize) => destination tile of coordinates (row, col).
+#### Return
+- Result<Path, String> => Ok(path) returns the path, Err(e) represents a possible error described by String e.
 
-#### Research
-
-
-#### Software Development
-
-
----
-
-### Useful Links
-
-[![Github](https://badgen.net/badge/icon/Github%20Repository/181717?icon=https://simpleicons.org/icons/github.svg&label&labelColor=FFF)](https://github.com/rust-eze-robotics/tools)
-
----
-
-Made with ♡ by
-[![Davide A.](https://badgen.net/badge/icon/Davide%20A./F96C5F?icon=github&label&labelColor=000)](https://github.com/andreolli-davide) [![Guglielmo B.](https://badgen.net/badge/icon/Guglielmo%20B./9CD96C?icon=github&label&labelColor=000)](https://github.com/guglielmo-boi) [![Aris T.](https://badgen.net/badge/icon/Aris%20T./66BDFF?icon=github&label&labelColor=000)](https://github.com/Kirseline) [![Chiara S.](https://badgen.net/badge/icon/Chiara%20S./B67DFF?icon=github&label&labelColor=000)](https://github.com/chiarasabaini)
+### *go_to_tile* calls *get_path_to_tile*: if the result is Ok(path) and the robot has enough energy to complete the path, it moves the robot to the path's destination tile.
+```rust
+pub fn go_to_tile(
+    &self,
+    robot: &mut impl Runnable,
+    world: &mut World,
+    adjacent: bool,
+    tile_type: Option<TileType>,
+    content: Option<Content>,
+) -> Result<Path, String>
+```
+#### Arguments
+- robot: &impl Runnable
+- world: &World
+- adjacent: bool => if true the function will target the adjacent tiles to the matched tiles, if false it will target the matched tiles themselves.
+- tile_type: Option<TileType> => optional tile type to be matched.
+- content: Option<Content> => optional content to be matched.  
+#### Return
+- Result<Path, String> => Ok(path) returns the path, Err(e) represents a possible error described by String e.
