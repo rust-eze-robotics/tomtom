@@ -76,3 +76,29 @@ pub fn go_to_tile(
 - content: Option<Content> => optional content to be matched.  
 #### Return
 - Result<Path, String> => Ok(path) returns the path, Err(e) represents a possible error described by String e.
+
+#### Action enumerates the possible actions of a path.
+```rust
+pub enum Action {
+    Go(Direction),
+    Teleport((usize, usize)),
+}
+```
+#### Variants:
+- Go(Direction) => go to the parameter direction.
+- Teleport((usize, usize)) => teleport to the tile of the parameter coordinates (row, col).
+
+#### Path describes the path from a source tile to a destination tile, with specific cost and actions.
+```rust
+pub struct Path {
+    pub source: (usize, usize),
+    pub destination: (usize, usize),
+    pub actions: Vec<Action>,
+    pub cost: usize,
+}
+```
+#### Fields:
+- source: (usize, usize) => source tile of coordinates (row, col).
+- destination: (usize, usize) => destination tile of coordinates (row, col).
+- actions: Vec<Action> => actions to be done to move from the source tile to the destination tile.
+- cost: usize => energy cost of the path.
