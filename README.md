@@ -50,8 +50,8 @@ pub fn go_to_coordinates(
 ) -> Result<Path, String> 
 ```
 #### Arguments
-- robot: &impl Runnable
-- world: &World
+- robot: &mut impl Runnable
+- world: &mut World
 - adjacent: bool => if true the function will target the adjacent tiles to destination, if false it will target destination itself.
 - destination: (usize, usize) => destination tile of coordinates (row, col).
 #### Return
@@ -69,8 +69,8 @@ pub fn go_to_tile(
 ) -> Result<Path, String>
 ```
 #### Arguments
-- robot: &impl Runnable
-- world: &World
+- robot: &mut impl Runnable
+- world: &mut World
 - adjacent: bool => if true the function will target the adjacent tiles to the matched tiles, if false it will target the matched tiles themselves.
 - tile_type: Option<TileType> => optional tile type to be matched.
 - content: Option<Content> => optional content to be matched.  
