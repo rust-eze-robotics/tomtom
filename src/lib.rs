@@ -6,8 +6,8 @@ use robotics_lib::runner::Runnable;
 use robotics_lib::world::tile::{Content, TileType};
 use robotics_lib::world::World;
 
-pub mod path;
 mod dijkstra;
+pub mod path;
 mod utils;
 
 #[derive(Default)]

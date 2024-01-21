@@ -4,7 +4,7 @@
 name = "rust_eze_tomtom"
 description = "Rust-eze Robotics TomTom"
 authors = ["Guglielmo Boi", "Davide Andreolli", "Chiara Sabaini", "Aris Tomaselli"]
-version = "1.0.0"
+version = "1.0.1"
 edition = "2021"
 exclude = [".*"]
 

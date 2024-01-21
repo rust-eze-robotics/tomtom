@@ -121,7 +121,7 @@ pub(crate) fn dijkstra(
                                 .actions
                                 .push(Action::Go(Direction::Left));
                             heap.push(State {
-                                node: (row, col + 1),
+                                node: (row, col - 1),
                                 distance: distance + cost,
                             });
                         }
@@ -176,9 +176,9 @@ pub(crate) fn dijkstra(
             }
 
             if ret.cost == usize::MAX {
-                Ok(ret)
-            } else {
                 Err(String::from("Path not found!"))
+            } else {
+                Ok(ret)
             }
         }
     }
