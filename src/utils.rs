@@ -57,14 +57,14 @@ pub(crate) fn get_specific_tiles(
             if let Some(tile) = map[row][col].as_ref() {
                 let mut control = true;
 
-                if let Some(t) = tile_type.clone() {
-                    if t != tile.tile_type {
+                if let Some(t) = tile_type.as_ref() {
+                    if *t != tile.tile_type {
                         control = false;
                     }
                 }
 
-                if let Some(c) = content.clone() {
-                    if c != tile.content {
+                if let Some(c) = content.as_ref() {
+                    if *c != tile.content {
                         control = false;
                     }
                 }

@@ -33,23 +33,24 @@ impl TomTom {
         adjacent: bool,
         destination: (usize, usize),
     ) -> Result<Path, String> {
-        if let Some(map) = robot_map(world) {
-            let source = (
-                robot.get_coordinate().get_row(),
-                robot.get_coordinate().get_col(),
-            );
+        match robot_map(world) {
+            None => Err(String::from("Map not visible!")),
+            Some(map) => {
+                let source = (
+                    robot.get_coordinate().get_row(),
+                    robot.get_coordinate().get_col(),
+                );
 
-            let mut targets = Vec::new();
+                let mut targets = Vec::new();
 
-            if adjacent {
-                targets.append(&mut get_adjacent_tiles(&map, destination));
-            } else {
-                targets.push(destination);
+                if adjacent {
+                    targets.append(&mut get_adjacent_tiles(&map, destination));
+                } else {
+                    targets.push(destination);
+                }
+
+                dijkstra(robot, world, &map, source, targets)
             }
-
-            dijkstra(robot, world, &map, source, targets)
-        } else {
-            Err(String::from("Map not visible!"))
         }
     }
 
@@ -73,26 +74,27 @@ impl TomTom {
         tile_type: Option<TileType>,
         content: Option<Content>,
     ) -> Result<Path, String> {
-        if let Some(map) = robot_map(world) {
-            let source = (
-                robot.get_coordinate().get_row(),
-                robot.get_coordinate().get_col(),
-            );
+        match robot_map(world) {
+            None => Err(String::from("Map not visible!")),
+            Some(map) => {
+                let source = (
+                    robot.get_coordinate().get_row(),
+                    robot.get_coordinate().get_col(),
+                );
 
-            let destinations = get_specific_tiles(&map, &tile_type, &content);
-            let mut targets = Vec::new();
+                let destinations = get_specific_tiles(&map, &tile_type, &content);
+                let mut targets = Vec::new();
 
-            for destination in destinations {
-                if adjacent {
-                    targets.append(&mut get_adjacent_tiles(&map, destination));
-                } else {
-                    targets.push(destination);
+                for destination in destinations {
+                    if adjacent {
+                        targets.append(&mut get_adjacent_tiles(&map, destination));
+                    } else {
+                        targets.push(destination);
+                    }
                 }
-            }
 
-            dijkstra(robot, world, &map, source, targets)
-        } else {
-            Err(String::from("Map not visible!"))
+                dijkstra(robot, world, &map, source, targets)
+            }
         }
     }
 
