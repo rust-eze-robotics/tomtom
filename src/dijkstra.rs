@@ -80,7 +80,7 @@ pub(crate) fn dijkstra(
                 let (row, col) = heap.peek().unwrap().node;
                 let distance = heap.pop().unwrap().distance;
 
-                if col + 1 < size {
+                if col + 1 < size && map[row][col + 1].is_some() {
                     if let Ok(cost) = calculate_go_cost(robot, world, Direction::Right) {
                         if distance + cost < paths[row][col + 1].cost {
                             paths[row][col + 1].cost = distance + cost;
@@ -96,7 +96,7 @@ pub(crate) fn dijkstra(
                     }
                 }
 
-                if row + 1 < size {
+                if row + 1 < size && map[row + 1][col].is_some() {
                     if let Ok(cost) = calculate_go_cost(robot, world, Direction::Down) {
                         if distance + cost < paths[row + 1][col].cost {
                             paths[row + 1][col].cost = distance + cost;
@@ -112,7 +112,7 @@ pub(crate) fn dijkstra(
                     }
                 }
 
-                if col > 0 {
+                if col > 0  && map[row][col - 1].is_some() {
                     if let Ok(cost) = calculate_go_cost(robot, world, Direction::Left) {
                         if distance + cost < paths[row][col - 1].cost {
                             paths[row][col - 1].cost = distance + cost;
@@ -128,7 +128,7 @@ pub(crate) fn dijkstra(
                     }
                 }
 
-                if row > 0 {
+                if row > 0 && map[row - 1][col].is_some(){
                     if let Ok(cost) = calculate_go_cost(robot, world, Direction::Up) {
                         if distance + cost < paths[row - 1][col].cost {
                             paths[row - 1][col].cost = distance + cost;
