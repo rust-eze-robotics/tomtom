@@ -143,11 +143,13 @@ pub(crate) fn calculate_teleport_cost(
 
             let (destination_row, destination_col) = (destination.0, destination.1);
 
-            if source_row >= map.len() || source_col >= map[0].len() {
+            let size = map.len();
+
+            if source_row >= size || source_col >= size {
                 return Err(String::from("Source out of bounds!"));
             }
 
-            if destination_row >= map.len() || destination_col >= map[0].len() {
+            if destination_row >= size || destination_col >= size {
                 return Err(String::from("Destination out of bounds!"));
             }
 
