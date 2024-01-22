@@ -112,7 +112,7 @@ pub(crate) fn dijkstra(
                     }
                 }
 
-                if col - 1 < size {
+                if col > 0 {
                     if let Ok(cost) = calculate_go_cost(robot, world, Direction::Left) {
                         if distance + cost < paths[row][col - 1].cost {
                             paths[row][col - 1].cost = distance + cost;
@@ -128,7 +128,7 @@ pub(crate) fn dijkstra(
                     }
                 }
 
-                if row - 1 < size {
+                if row > 0 {
                     if let Ok(cost) = calculate_go_cost(robot, world, Direction::Up) {
                         if distance + cost < paths[row - 1][col].cost {
                             paths[row - 1][col].cost = distance + cost;

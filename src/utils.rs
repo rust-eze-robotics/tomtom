@@ -30,11 +30,11 @@ pub(crate) fn get_adjacent_tiles(world: &World, tile: (usize, usize)) -> Vec<(us
             ret.push((row + 1, col));
         }
 
-        if col - 1 < size && map[row][col - 1].is_some() {
+        if col > 0 && map[row][col - 1].is_some() {
             ret.push((row, col - 1));
         }
 
-        if row - 1 < size && map[row - 1][col].is_some() {
+        if row > 0 && map[row - 1][col].is_some() {
             ret.push((row - 1, col));
         }
     }
