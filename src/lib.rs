@@ -1,7 +1,7 @@
 use crate::dijkstra::dijkstra;
 use crate::path::{Action, Path};
 use crate::utils::{get_adjacent_tiles, get_specific_tiles};
-use robotics_lib::interface::{go, teleport, Tools};
+use robotics_lib::interface::{go, robot_map, teleport, Tools};
 use robotics_lib::runner::Runnable;
 use robotics_lib::world::tile::{Content, TileType};
 use robotics_lib::world::World;
@@ -33,20 +33,24 @@ impl TomTom {
         adjacent: bool,
         destination: (usize, usize),
     ) -> Result<Path, String> {
-        let source = (
-            robot.get_coordinate().get_row(),
-            robot.get_coordinate().get_col(),
-        );
+        if let Some(map) = robot_map(world) {
+            let source = (
+                robot.get_coordinate().get_row(),
+                robot.get_coordinate().get_col(),
+            );
 
-        let mut targets = Vec::new();
+            let mut targets = Vec::new();
 
-        if adjacent {
-            targets.append(&mut get_adjacent_tiles(world, destination));
+            if adjacent {
+                targets.append(&mut get_adjacent_tiles(&map, destination));
+            } else {
+                targets.push(destination);
+            }
+
+            dijkstra(robot, world, &map, source, targets)
         } else {
-            targets.push(destination);
+            Err(String::from("Map not visible!"))
         }
-
-        dijkstra(robot, world, source, targets)
     }
 
     /// get_path_to_tile returns the path having the smallest energy cost to reach the 'nearest' matched tile (or the 'nearest' adjacent tile),
@@ -69,23 +73,27 @@ impl TomTom {
         tile_type: Option<TileType>,
         content: Option<Content>,
     ) -> Result<Path, String> {
-        let source = (
-            robot.get_coordinate().get_row(),
-            robot.get_coordinate().get_col(),
-        );
+        if let Some(map) = robot_map(world) {
+            let source = (
+                robot.get_coordinate().get_row(),
+                robot.get_coordinate().get_col(),
+            );
 
-        let destinations = get_specific_tiles(world, &tile_type, &content);
-        let mut targets = Vec::new();
+            let destinations = get_specific_tiles(&map, &tile_type, &content);
+            let mut targets = Vec::new();
 
-        for destination in destinations {
-            if adjacent {
-                targets.append(&mut get_adjacent_tiles(world, destination));
-            } else {
-                targets.push(destination);
+            for destination in destinations {
+                if adjacent {
+                    targets.append(&mut get_adjacent_tiles(&map, destination));
+                } else {
+                    targets.push(destination);
+                }
             }
-        }
 
-        dijkstra(robot, world, source, targets)
+            dijkstra(robot, world, &map, source, targets)
+        } else {
+            Err(String::from("Map not visible!"))
+        }
     }
 
     /// go_to_coordinates calls get_path_to_coordinates: if the result is Ok(path) and the robot has enough energy to complete the path, it moves
