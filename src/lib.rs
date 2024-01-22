@@ -28,7 +28,6 @@ impl TomTom {
     /// # Return
     /// - Result<Path, String> => Ok(path) returns the path, Err(e) represents a possible error described by String e.
     pub fn get_path_to_coordinates(
-        &self,
         robot: &impl Runnable,
         world: &World,
         adjacent: bool,
@@ -64,7 +63,6 @@ impl TomTom {
     /// # Return
     /// - Result<Path, String> => Ok(path) returns the path, Err(e) represents a possible error described by String e.
     pub fn get_path_to_tile(
-        &self,
         robot: &impl Runnable,
         world: &World,
         adjacent: bool,
@@ -102,13 +100,12 @@ impl TomTom {
     /// # Return
     /// - Result<Path, String> => Ok(path) returns the path, Err(e) represents a possible error described by String e.
     pub fn go_to_coordinates(
-        &self,
         robot: &mut impl Runnable,
         world: &mut World,
         adjacent: bool,
         destination: (usize, usize),
     ) -> Result<Path, String> {
-        match self.get_path_to_coordinates(robot, world, adjacent, destination) {
+        match TomTom::get_path_to_coordinates(robot, world, adjacent, destination) {
             Err(e) => Err(e),
             Ok(path) => {
                 if !robot.get_energy().has_enough_energy(path.cost) {
@@ -150,14 +147,13 @@ impl TomTom {
     /// # Return
     /// - Result<Path, String> => Ok(path) returns the path, Err(e) represents a possible error described by String e.
     pub fn go_to_tile(
-        &self,
         robot: &mut impl Runnable,
         world: &mut World,
         adjacent: bool,
         tile_type: Option<TileType>,
         content: Option<Content>,
     ) -> Result<Path, String> {
-        match self.get_path_to_tile(robot, world, adjacent, tile_type, content) {
+        match TomTom::get_path_to_tile(robot, world, adjacent, tile_type, content) {
             Err(e) => Err(e),
             Ok(path) => {
                 if !robot.get_energy().has_enough_energy(path.cost) {
