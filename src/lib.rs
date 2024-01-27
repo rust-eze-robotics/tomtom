@@ -1,13 +1,14 @@
 use crate::dijkstra::dijkstra;
 use crate::path::{Action, Path};
 use crate::utils::{get_adjacent_tiles, get_specific_tiles};
+use plain::{PlainContent, PlainTileType};
 use robotics_lib::interface::{go, robot_map, teleport, Tools};
 use robotics_lib::runner::Runnable;
-use robotics_lib::world::tile::{Content, TileType};
 use robotics_lib::world::World;
 
 mod dijkstra;
 pub mod path;
+pub mod plain;
 mod utils;
 
 #[derive(Default)]
@@ -62,8 +63,8 @@ impl TomTom {
     /// - robot: &impl Runnable
     /// - world: &World
     /// - adjacent: bool => if true the function will target the adjacent tiles to the matched tiles, if false it will target the matched tiles themselves.
-    /// - tile_type: Option<TileType> => optional tile type to be matched.
-    /// - content: Option<Content> => optional content to be matched.  
+    /// - tile_type: Option<PlainTileType> => optional tile type to be matched.
+    /// - content: Option<PlainContent> => optional content to be matched.  
     ///
     /// # Return
     /// - Result<Path, String> => Ok(path) returns the path, Err(e) represents a possible error described by String e.
@@ -71,8 +72,8 @@ impl TomTom {
         robot: &impl Runnable,
         world: &World,
         adjacent: bool,
-        tile_type: Option<TileType>,
-        content: Option<Content>,
+        tile_type: Option<PlainTileType>,
+        content: Option<PlainContent>,
     ) -> Result<Path, String> {
         match robot_map(world) {
             None => Err(String::from("Map not visible!")),
@@ -151,8 +152,8 @@ impl TomTom {
     /// - robot: &impl Runnable
     /// - world: &World
     /// - adjacent: bool => if true the function will target the adjacent tiles to the matched tiles, if false it will target the matched tiles themselves.
-    /// - tile_type: Option<TileType> => optional tile type to be matched.
-    /// - content: Option<Content> => optional content to be matched.  
+    /// - tile_type: Option<PlainTileType> => optional tile type to be matched.
+    /// - content: Option<PlainContent> => optional content to be matched.  
     ///
     /// # Return
     /// - Result<Path, String> => Ok(path) returns the path, Err(e) represents a possible error described by String e.
@@ -160,8 +161,8 @@ impl TomTom {
         robot: &mut impl Runnable,
         world: &mut World,
         adjacent: bool,
-        tile_type: Option<TileType>,
-        content: Option<Content>,
+        tile_type: Option<PlainTileType>,
+        content: Option<PlainContent>,
     ) -> Result<Path, String> {
         match TomTom::get_path_to_tile(robot, world, adjacent, tile_type, content) {
             Err(e) => Err(e),

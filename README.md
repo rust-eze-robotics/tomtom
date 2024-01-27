@@ -24,16 +24,16 @@ pub fn get_path_to_tile(
     robot: &impl Runnable,
     world: &World,
     adjacent: bool,
-    tile_type: Option<TileType>,
-    content: Option<Content>,
+    tile_type: Option<PlainTileType>,
+    content: Option<PlainContent>,
 ) -> Result<Path, String>
 ```
 #### Arguments
 - robot: &impl Runnable
 - world: &World
 - adjacent: bool => if true the function will target the adjacent tiles to the matched tiles, if false it will target the matched tiles themselves.
-- tile_type: Option<TileType> => optional tile type to be matched.
-- content: Option<Content> => optional content to be matched.  
+- tile_type: Option<PlainTileType> => optional tile type to be matched.
+- content: Option<PlainContent> => optional content to be matched.  
 #### Return
 - Result<Path, String> => Ok(path) returns the path, Err(e) represents a possible error described by String e.
 
@@ -60,16 +60,16 @@ pub fn go_to_tile(
     robot: &mut impl Runnable,
     world: &mut World,
     adjacent: bool,
-    tile_type: Option<TileType>,
-    content: Option<Content>,
+    tile_type: Option<PlainTileType>,
+    content: Option<PlainContent>,
 ) -> Result<Path, String>
 ```
 #### Arguments
 - robot: &mut impl Runnable
 - world: &mut World
 - adjacent: bool => if true the function will target the adjacent tiles to the matched tiles, if false it will target the matched tiles themselves.
-- tile_type: Option<TileType> => optional tile type to be matched.
-- content: Option<Content> => optional content to be matched.  
+- tile_type: Option<PlainTileType> => optional tile type to be matched.
+- content: Option<PlainContent> => optional content to be matched.  
 #### Return
 - Result<Path, String> => Ok(path) returns the path, Err(e) represents a possible error described by String e.
 

@@ -1,7 +1,9 @@
 use robotics_lib::interface::{look_at_sky, Direction};
 use robotics_lib::runner::Runnable;
 use robotics_lib::utils::{calculate_cost_go_with_environment, go_allowed};
-use robotics_lib::world::{tile::Content, tile::Tile, tile::TileType, World};
+use robotics_lib::world::{tile::Tile, tile::TileType, World};
+
+use crate::plain::{PlainContent, PlainTileType};
 
 fn get_coords_row_col(robot: &impl Runnable, direction: Direction) -> (usize, usize) {
     let row = robot.get_coordinate().get_row();
@@ -45,8 +47,8 @@ pub(crate) fn get_adjacent_tiles(
 
 pub(crate) fn get_specific_tiles(
     map: &Vec<Vec<Option<Tile>>>,
-    tile_type: &Option<TileType>,
-    content: &Option<Content>,
+    plain_tile_type: &Option<PlainTileType>,
+    plain_content: &Option<PlainContent>,
 ) -> Vec<(usize, usize)> {
     let mut ret = Vec::new();
 
@@ -57,14 +59,14 @@ pub(crate) fn get_specific_tiles(
             if let Some(tile) = map[row][col].as_ref() {
                 let mut control = true;
 
-                if let Some(t) = tile_type.as_ref() {
-                    if *t != tile.tile_type {
+                if let Some(plain_tile_type) = plain_tile_type {
+                    if !plain_tile_type.eq_tile_type(&tile.tile_type) {
                         control = false;
                     }
                 }
 
-                if let Some(c) = content.as_ref() {
-                    if *c != tile.content {
+                if let Some(plain_content) = plain_content {
+                    if !plain_content.eq_content(&tile.content) {
                         control = false;
                     }
                 }
