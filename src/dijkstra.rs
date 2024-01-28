@@ -4,7 +4,7 @@ use robotics_lib::interface::Direction;
 use robotics_lib::runner::Runnable;
 use robotics_lib::world::{tile::Tile, tile::TileType, World};
 use std::cmp::Ordering;
-use std::collections::BinaryHeap;
+use std::collections::{BinaryHeap, HashSet};
 
 #[derive(Eq)]
 struct State {
@@ -35,7 +35,7 @@ pub(crate) fn dijkstra(
     world: &World,
     map: &Vec<Vec<Option<Tile>>>,
     source: (usize, usize),
-    targets: Vec<(usize, usize)>,
+    targets: HashSet<(usize, usize)>,
 ) -> Result<Path, String> {
     if targets.is_empty() {
         return Err(String::from("Path not found!"));

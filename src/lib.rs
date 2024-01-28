@@ -1,3 +1,5 @@
+use std::collections::HashSet;
+
 use crate::dijkstra::dijkstra;
 use crate::path::{Action, Path};
 use crate::utils::{get_adjacent_tiles, get_specific_tiles};
@@ -42,12 +44,12 @@ impl TomTom {
                     robot.get_coordinate().get_col(),
                 );
 
-                let mut targets = Vec::new();
+                let mut targets = HashSet::new();
 
                 if adjacent {
-                    targets.append(&mut get_adjacent_tiles(&map, destination));
+                    targets.extend(get_adjacent_tiles(&map, destination));
                 } else {
-                    targets.push(destination);
+                    targets.insert(destination);
                 }
 
                 dijkstra(robot, world, &map, source, targets)
@@ -84,13 +86,13 @@ impl TomTom {
                 );
 
                 let destinations = get_specific_tiles(&map, &tile_type, &content);
-                let mut targets = Vec::new();
+                let mut targets = HashSet::new();
 
                 for destination in destinations {
                     if adjacent {
-                        targets.append(&mut get_adjacent_tiles(&map, destination));
+                        targets.extend(get_adjacent_tiles(&map, destination));
                     } else {
-                        targets.push(destination);
+                        targets.insert(destination);
                     }
                 }
 
