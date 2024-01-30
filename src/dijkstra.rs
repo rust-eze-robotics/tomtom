@@ -20,7 +20,7 @@ impl Ord for State {
 
 impl PartialOrd for State {
     fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
-        Some(other.cmp(self))
+        Some(self.cmp(other))
     }
 }
 
@@ -141,19 +141,19 @@ pub(crate) fn dijkstra(
 
         if let Some(tile) = map[row][col].as_ref() {
             if tile.tile_type == TileType::Teleport(true) {
-                for (teleport_row, teleport_col) in teleports.clone() {
+                for (teleport_row, teleport_col) in teleports.iter() {
                     if let Ok(cost) =
-                        calculate_teleport_cost(robot, map, (teleport_row, teleport_col))
+                        calculate_teleport_cost(robot, map, (*teleport_row, *teleport_col))
                     {
-                        if distance + cost < paths[teleport_row][teleport_col].cost {
-                            paths[teleport_row][teleport_col].cost = distance + cost;
-                            paths[teleport_row][teleport_col].actions =
+                        if distance + cost < paths[*teleport_row][*teleport_col].cost {
+                            paths[*teleport_row][*teleport_col].cost = distance + cost;
+                            paths[*teleport_row][*teleport_col].actions =
                                 paths[row][col].actions.clone();
-                            paths[teleport_row][teleport_col]
+                            paths[*teleport_row][*teleport_col]
                                 .actions
-                                .push(Action::Teleport((teleport_row, teleport_col)));
+                                .push(Action::Teleport((*teleport_row, *teleport_col)));
                             heap.push(State {
-                                node: (teleport_row, teleport_col),
+                                node: (*teleport_row, *teleport_col),
                                 distance: distance + cost,
                             });
                         }
