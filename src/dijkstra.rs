@@ -78,7 +78,7 @@ pub(crate) fn dijkstra(
         let distance = heap.pop().unwrap().distance;
 
         if col + 1 < size && map[row][col + 1].is_some() {
-            if let Ok(cost) = calculate_go_cost(robot, world, map, Direction::Right) {
+            if let Ok(cost) = calculate_go_cost(robot, world, map, (row, col), Direction::Right) {
                 if distance + cost < paths[row][col + 1].cost {
                     paths[row][col + 1].cost = distance + cost;
                     paths[row][col + 1].actions = paths[row][col].actions.clone();
@@ -94,7 +94,7 @@ pub(crate) fn dijkstra(
         }
 
         if row + 1 < size && map[row + 1][col].is_some() {
-            if let Ok(cost) = calculate_go_cost(robot, world, map, Direction::Down) {
+            if let Ok(cost) = calculate_go_cost(robot, world, map, (row, col), Direction::Down) {
                 if distance + cost < paths[row + 1][col].cost {
                     paths[row + 1][col].cost = distance + cost;
                     paths[row + 1][col].actions = paths[row][col].actions.clone();
@@ -110,7 +110,7 @@ pub(crate) fn dijkstra(
         }
 
         if col > 0 && map[row][col - 1].is_some() {
-            if let Ok(cost) = calculate_go_cost(robot, world, map, Direction::Left) {
+            if let Ok(cost) = calculate_go_cost(robot, world, map, (row, col), Direction::Left) {
                 if distance + cost < paths[row][col - 1].cost {
                     paths[row][col - 1].cost = distance + cost;
                     paths[row][col - 1].actions = paths[row][col].actions.clone();
@@ -126,7 +126,7 @@ pub(crate) fn dijkstra(
         }
 
         if row > 0 && map[row - 1][col].is_some() {
-            if let Ok(cost) = calculate_go_cost(robot, world, map, Direction::Up) {
+            if let Ok(cost) = calculate_go_cost(robot, world, map, (row, col), Direction::Up) {
                 if distance + cost < paths[row - 1][col].cost {
                     paths[row - 1][col].cost = distance + cost;
                     paths[row - 1][col].actions = paths[row][col].actions.clone();

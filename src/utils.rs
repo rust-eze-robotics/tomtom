@@ -85,16 +85,14 @@ pub(crate) fn calculate_go_cost(
     robot: &impl Runnable,
     world: &World,
     map: &Vec<Vec<Option<Tile>>>,
+    source: (usize, usize),
     direction: Direction,
 ) -> Result<usize, String> {
     if go_allowed(robot, world, &direction).is_err() {
         return Err(String::from("Go not allowed!"));
     }
 
-    let (source_row, source_col) = (
-        robot.get_coordinate().get_row(),
-        robot.get_coordinate().get_col(),
-    );
+    let (source_row, source_col) = source;
 
     let (destination_row, destination_col) = get_coords_row_col(robot, direction);
 
