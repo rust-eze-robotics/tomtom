@@ -5,9 +5,8 @@ use robotics_lib::world::{tile::Tile, tile::TileType, World};
 
 use crate::plain::{PlainContent, PlainTileType};
 
-fn get_coords_row_col(robot: &impl Runnable, direction: Direction) -> (usize, usize) {
-    let row = robot.get_coordinate().get_row();
-    let col = robot.get_coordinate().get_col();
+fn get_coords_row_col(source: (usize, usize), direction: Direction) -> (usize, usize) {
+    let (row, col) = source;
 
     match direction {
         Direction::Up => (row - 1, col),
@@ -93,8 +92,7 @@ pub(crate) fn calculate_go_cost(
     }
 
     let (source_row, source_col) = source;
-
-    let (destination_row, destination_col) = get_coords_row_col(robot, direction);
+    let (destination_row, destination_col) = get_coords_row_col(source, direction);
 
     if map[source_row][source_col].is_none() {
         return Err(String::from("Source is None!"));
