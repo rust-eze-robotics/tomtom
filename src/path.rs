@@ -1,3 +1,5 @@
+use std::collections::VecDeque;
+
 use robotics_lib::interface::Direction;
 
 /// Action enumerates the possible actions of a path.
@@ -22,7 +24,7 @@ pub enum Action {
 pub struct Path {
     pub source: (usize, usize),
     pub destination: (usize, usize),
-    pub actions: Vec<Action>,
+    pub actions: VecDeque<Action>,
     pub cost: usize,
 }
 
@@ -31,7 +33,7 @@ impl Path {
         Path {
             source,
             destination,
-            actions: Vec::new(),
+            actions: VecDeque::new(),
             cost,
         }
     }

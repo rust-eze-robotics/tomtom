@@ -84,7 +84,7 @@ pub(crate) fn dijkstra(
                     paths[row][col + 1].actions = paths[row][col].actions.clone();
                     paths[row][col + 1]
                         .actions
-                        .push(Action::Go(Direction::Right));
+                        .push_back(Action::Go(Direction::Right));
                     heap.push(State {
                         node: (row, col + 1),
                         distance: distance + cost,
@@ -100,7 +100,7 @@ pub(crate) fn dijkstra(
                     paths[row + 1][col].actions = paths[row][col].actions.clone();
                     paths[row + 1][col]
                         .actions
-                        .push(Action::Go(Direction::Down));
+                        .push_back(Action::Go(Direction::Down));
                     heap.push(State {
                         node: (row + 1, col),
                         distance: distance + cost,
@@ -116,7 +116,7 @@ pub(crate) fn dijkstra(
                     paths[row][col - 1].actions = paths[row][col].actions.clone();
                     paths[row][col - 1]
                         .actions
-                        .push(Action::Go(Direction::Left));
+                        .push_back(Action::Go(Direction::Left));
                     heap.push(State {
                         node: (row, col - 1),
                         distance: distance + cost,
@@ -130,7 +130,7 @@ pub(crate) fn dijkstra(
                 if distance + cost < paths[row - 1][col].cost {
                     paths[row - 1][col].cost = distance + cost;
                     paths[row - 1][col].actions = paths[row][col].actions.clone();
-                    paths[row - 1][col].actions.push(Action::Go(Direction::Up));
+                    paths[row - 1][col].actions.push_back(Action::Go(Direction::Up));
                     heap.push(State {
                         node: (row - 1, col),
                         distance: distance + cost,
@@ -151,7 +151,7 @@ pub(crate) fn dijkstra(
                                 paths[row][col].actions.clone();
                             paths[*teleport_row][*teleport_col]
                                 .actions
-                                .push(Action::Teleport((*teleport_row, *teleport_col)));
+                                .push_back(Action::Teleport((*teleport_row, *teleport_col)));
                             heap.push(State {
                                 node: (*teleport_row, *teleport_col),
                                 distance: distance + cost,

@@ -89,12 +89,12 @@ pub enum Action {
 pub struct Path {
     pub source: (usize, usize),
     pub destination: (usize, usize),
-    pub actions: Vec<Action>,
+    pub actions: VecDeque<Action>,
     pub cost: usize,
 }
 ```
 #### Fields:
 - source: (usize, usize) => source tile of coordinates (row, col).
 - destination: (usize, usize) => destination tile of coordinates (row, col).
-- actions: Vec<Action> => actions to be done to move from the source tile to the destination tile.
+- actions: VecDeque<Action> => actions to be performed to move from the source tile to the destination tile.
 - cost: usize => energy cost of the path.
