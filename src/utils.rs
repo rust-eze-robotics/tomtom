@@ -1,6 +1,6 @@
 use robotics_lib::interface::{look_at_sky, Direction};
 use robotics_lib::runner::Runnable;
-use robotics_lib::utils::{calculate_cost_go_with_environment, go_allowed};
+use robotics_lib::utils::calculate_cost_go_with_environment;
 use robotics_lib::world::{tile::Tile, tile::TileType, World};
 
 use crate::plain::{PlainContent, PlainTileType};
@@ -81,16 +81,11 @@ pub(crate) fn get_specific_tiles(
 }
 
 pub(crate) fn calculate_go_cost(
-    robot: &impl Runnable,
     world: &World,
     map: &Vec<Vec<Option<Tile>>>,
     source: (usize, usize),
     direction: Direction,
 ) -> Result<usize, String> {
-    if go_allowed(robot, world, &direction).is_err() {
-        return Err(String::from("Go not allowed!"));
-    }
-
     let (source_row, source_col) = source;
     let (destination_row, destination_col) = get_coords_row_col(source, direction);
 
@@ -104,6 +99,10 @@ pub(crate) fn calculate_go_cost(
 
     let source = map[source_row][source_col].clone().unwrap();
     let destination = map[destination_row][destination_col].clone().unwrap();
+
+    if !destination.tile_type.properties().walk() {
+        return Err(String::from("Go not allowed!"));
+    }
 
     let mut base_cost = destination.tile_type.properties().cost();
     let mut elevation_cost = 0;
