@@ -1,6 +1,6 @@
 use robotics_lib::world::tile::{Content, TileType};
 
-#[derive(Debug, PartialEq, Eq)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum PlainTileType {
     DeepWater,
     ShallowWater,
@@ -33,7 +33,7 @@ impl PlainTileType {
     }
 }
 
-#[derive(Debug, PartialEq, Eq)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum PlainContent {
     Rock,
     Tree,
