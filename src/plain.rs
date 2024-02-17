@@ -1,6 +1,6 @@
 use robotics_lib::world::tile::{Content, TileType};
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub enum PlainTileType {
     DeepWater,
     ShallowWater,
@@ -16,7 +16,7 @@ pub enum PlainTileType {
 }
 
 impl PlainTileType {
-    pub(crate) fn eq_tile_type(&self, tile_type: &TileType) -> bool {
+    pub fn eq_tile_type(&self, tile_type: &TileType) -> bool {
         match tile_type {
             TileType::DeepWater => *self == PlainTileType::DeepWater,
             TileType::ShallowWater => *self == PlainTileType::ShallowWater,
@@ -33,7 +33,7 @@ impl PlainTileType {
     }
 }
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub enum PlainContent {
     Rock,
     Tree,
@@ -54,7 +54,7 @@ pub enum PlainContent {
 }
 
 impl PlainContent {
-    pub(crate) fn eq_content(&self, content: &Content) -> bool {
+    pub fn eq_content(&self, content: &Content) -> bool {
         match content {
             Content::Rock(_) => *self == PlainContent::Rock,
             Content::Tree(_) => *self == PlainContent::Tree,
